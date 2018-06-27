@@ -1,0 +1,21 @@
+{
+  "name": "pingmon",
+  "version": "0.1.0",
+  "description": "Monitor network connection via pinging the world wide web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ping",
+    "web",
+    "internet",
+    "monitor"
+  ],
+  "author": "Christopher LaPointe",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3",
+    "lodash": "^4.17.10"
+  }
+}
