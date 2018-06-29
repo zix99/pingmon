@@ -1,0 +1,35 @@
+{
+  "name": "pingmon-monitor",
+  "version": "0.1.0",
+  "description": "Monitor network connection via pinging the world wide web",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ping",
+    "web",
+    "internet",
+    "monitor"
+  ],
+  "author": "Christopher LaPointe",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "express": "^4.16.3",
+    "lodash": "^4.17.10",
+    "net-ping": "^1.2.3",
+    "rc": "^1.2.8",
+    "sequelize": "^4.38.0",
+    "sqlite3": "^4.0.1",
+    "winston": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.0.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "nodemon": "^1.17.5"
+  }
+}

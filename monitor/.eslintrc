@@ -1,0 +1,22 @@
+{
+    "extends": "airbnb-base",
+    "plugins": [
+        "import"
+    ],
+    "env" : {
+        "mocha" : true,
+        "node" : true,
+        "es6" : true
+    },
+    "rules" : {
+        "no-underscore-dangle" : "warn",
+        "comma-dangle" : "warn",
+        "arrow-parens" : "warn",
+        "max-len" : ["warn", 200],
+        "prefer-arrow-callback" : "warn",
+        "consistent-return" : "warn",
+        "curly" : ["error", "multi-or-nest"],
+        "no-plusplus" : "off",
+        "object-curly-newline": "off",
+    }
+}
