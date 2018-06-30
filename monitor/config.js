@@ -11,4 +11,6 @@ module.exports = require('rc')('pingmon', {
     maxHopTimeouts: 3,
     startTtl: 1,
   },
+  db: 'sqlite://pingmon.db',
+  verbose: true,
 });
