@@ -17,6 +17,18 @@ function resolveHostIp(target, err) {
   return target;
 }
 
+function getErrorName(err) {
+  if (!err) return null;
+  if (err instanceof ping.RequestTimedOutError) return 'RequestTimedOut';
+  if (err instanceof ping.DestinationUnreachableError) return 'DestinationUnreachable';
+  if (err instanceof ping.PacketTooBigError) return 'PacketTooBig';
+  if (err instanceof ping.ParameterProblemError) return 'ParameterProblem';
+  if (err instanceof ping.RedirectReceivedError) return 'Redirect';
+  if (err instanceof ping.SourceQuenchError) return 'SourceQuench';
+  if (err instanceof ping.TimeExceededError) return null; // TimeExceededError isn't a real error for this use case (just means we hit ttl)
+  return `Unknown: ${err}`;
+}
+
 function refresh() {
   log.info('Refreshing...');
 
@@ -29,13 +41,14 @@ function refresh() {
       const ip = resolveHostIp(target, err);
       ipresolver.resolve(ip).then((host) => {
         log.info(`[${target}] ${host} (${ttl}) ${recvd - sent}ms`);
-        db.ping.create({
+        db.pinghops.create({
           batch,
           start,
           target,
-          responseIp: ip,
-          responseHost: host,
+          ip,
+          host,
           ttl,
+          error: getErrorName(err),
           millis: (recvd - sent),
         });
       });
@@ -55,8 +68,10 @@ function timerCallback() {
   }
 }
 
-db.db.sync().then(() => {
-  log.info(`Pinging targets every ${config.frequency} seconds`);
-  timerCallback();
-  setInterval(timerCallback, config.frequency * 1000);
-});
+module.exports = {
+  start() {
+    log.info(`Pinging targets every ${config.frequency} seconds`);
+    timerCallback();
+    setInterval(timerCallback, config.frequency * 1000);
+  },
+};

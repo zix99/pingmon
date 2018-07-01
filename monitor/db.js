@@ -6,15 +6,15 @@ const db = new Sequelize(config.db, {
   logging: txt => log.debug(txt),
 });
 
-const ping = db.define('ping', {
+const pinghops = db.define('pinghops', {
   batch: Sequelize.STRING,
-  target: Sequelize.STRING,
+  target: Sequelize.STRING, // The end-target
   start: Sequelize.DATE,
-  responseIp: Sequelize.STRING,
-  responseHost: Sequelize.STRING,
+  ip: Sequelize.STRING, // the hop ip
+  host: Sequelize.STRING, // the hop host
   error: Sequelize.STRING,
   ttl: Sequelize.INTEGER,
-  millis: Sequelize.INTEGER, // ??
+  millis: Sequelize.INTEGER,
 }, {
   indexes: [
     { fields: ['batch', 'target'] },
@@ -23,5 +23,5 @@ const ping = db.define('ping', {
 
 module.exports = {
   db,
-  ping,
+  pinghops,
 };
