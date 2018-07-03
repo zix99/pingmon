@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 const express = require('express');
+const moment = require('moment');
+const Sequelize = require('sequelize');
 const log = require('./log');
 const db = require('./db');
 const config = require('./config');
@@ -55,6 +57,26 @@ app.get('/api/v1/target/:target/latest', (req, res, next) => {
   }).catch(next);
 });
 
+// Get latest statistics for targets (max/min/average)
+app.get('/api/v1/stats', (req, res, next) => {
+  const since = moment().subtract(req.query.duration || (24 * 60), 'minutes');
+  db.pinghops.findAll({
+    where: {
+      start: { [Op.gt]: since },
+    },
+    group: ['ip', 'target'],
+    attributes: [
+      'ip',
+      'target',
+      [Sequelize.fn('max', Sequelize.col('millis')), 'max'],
+      [Sequelize.fn('min', Sequelize.col('millis')), 'min'],
+      [Sequelize.fn('avg', Sequelize.col('millis')), 'avg'],
+    ],
+  }).then((rows) => {
+    res.send(rows);
+  }).catch(next);
+});
+
 /* eslint-disable no-unused-vars */
 app.use((err, req, res, next) => {
   log.error(err);
@@ -64,8 +86,7 @@ app.use((err, req, res, next) => {
 
 db.db.sync().then(() => {
   monitor.start();
-});
-
-app.listen(config.http.port, config.http.host, () => {
-  log.info(`HTTP Server started on http://${config.http.host}:${config.http.port}`);
+  app.listen(config.http.port, config.http.host, () => {
+    log.info(`HTTP Server started on http://${config.http.host}:${config.http.port}`);
+  });
 });
